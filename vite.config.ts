@@ -21,7 +21,7 @@ const cssConfig = {
     ],
   },
   modules: {
-    localsConvention: 'camelCase',
+    localsConvention: 'camelCase' as 'camelCase',
     generateScopedName: isDev ? '[name]__[local]__[hash:base64:5]' : '[hash:base64:8]',
   },
 };
@@ -73,27 +73,27 @@ const baseConfig: UserConfig = {
         gzipSize: true,
         brotliSize: true,
       }),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
-      manifest: {
-        name: 'Your Extension Name',
-        short_name: 'Extension',
-        theme_color: '#ffffff',
-        icons: [
-          {
-            src: '/android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
-    }),
+    // VitePWA({
+    //   registerType: 'autoUpdate',
+    //   includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+    //   manifest: {
+    //     name: 'Your Extension Name',
+    //     short_name: 'Extension',
+    //     theme_color: '#ffffff',
+    //     icons: [
+    //       {
+    //         src: '/android-chrome-192x192.png',
+    //         sizes: '192x192',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: '/android-chrome-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //       },
+    //     ],
+    //   },
+    // }),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -247,7 +247,7 @@ const contentConfig: UserConfig = {
 };
 
 // Export configurations based on command line arguments with enhanced development features
-export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
+export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const config = process.env.VITE_CONFIG;
 
   if (mode === 'development') {

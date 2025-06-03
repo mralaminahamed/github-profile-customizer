@@ -225,7 +225,6 @@ export const App: React.FC = () => {
                 onFilterChange={setFilter}
                 onUpdateVisibility={updateOrganizationVisibility}
                 onBatchUpdateVisibility={batchUpdateOrganizationVisibility}
-                onSettingChange={handleSettingChangeCurried}
               />
             )}
           </Tab.Panel>
@@ -239,7 +238,6 @@ export const App: React.FC = () => {
                 onThemeChange={handleThemeChange}
                 onExport={exportSettings}
                 onImport={importSettings}
-                onReset={handleReset}
               />
             )}
           </Tab.Panel>

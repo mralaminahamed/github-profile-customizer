@@ -188,7 +188,7 @@ const OrganizationsTab: React.FC<OrganizationsTabProps> = ({
   onUpdateVisibility,
   onBatchUpdateVisibility,
   error,
-  onSettingChange,
+  // onSettingChange, // Removed as it's unused in this component
 }) => {
   // Quick actions for batch operations
   const handleBatchOperation = (operation: 'hideAll' | 'showAll') => {

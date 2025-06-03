@@ -3,7 +3,6 @@
   "description": "Customize your GitHub profile interface",
   "type": "module",
   "version": "1.0.0",
-  "packageManager": "yarn@4.1.0",
   "scripts": {
     "ext:prepare": "esno scripts/prepare.ts",
     "dev": "yarn type-check && cross-env NODE_ENV=development run-p ext:prepare dev:build dev:ext",
@@ -67,12 +66,17 @@
     "postcss": "^8.5.1",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
+    "rollup-plugin-visualizer": "^5.12.0",
     "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
     "vite": "^6.0.7",
+    "vite-plugin-checker": "^0.7.0",
+    "vite-plugin-pwa": "^0.20.0",
     "web-ext": "^8.3.0",
-    "web-ext-submit": "^7.8.0"
+    "web-ext-submit": "^7.8.0",
+    "workbox-build": "^7.1.0",
+    "workbox-window": "^7.1.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

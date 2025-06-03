@@ -179,5 +179,5 @@ export type MessageResponse =
 
 export interface TabProps {
   settings: Settings;
-  onSettingChange: (key: keyof Settings) => (value: any) => void;
+  onSettingChange?: (key: keyof Settings) => (value: any) => void;
 }

@@ -331,14 +331,11 @@ export const QuickActionButton: React.FC<QuickActionButtonProps> = ({
 );
 
 export interface RadioGroupOptionProps {
-  value: string;
   label: string;
   description?: string;
 }
 
-// @ts-ignore
 export const RadioGroupOption: React.FC<RadioGroupOptionProps & { checked: boolean }> = ({
-  value,
   label,
   description,
   checked,

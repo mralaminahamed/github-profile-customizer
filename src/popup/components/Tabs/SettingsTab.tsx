@@ -9,17 +9,16 @@ interface SettingsTabProps extends TabProps {
   onExport: () => void;
   onImport: (settings: Settings) => void;
   onThemeChange: (theme: Theme) => void;
-  onReset?: () => Promise<void>;
+  // onReset?: () => Promise<void>; // Removed as unused in this component
 }
 
-// @ts-ignore
 const SettingsTab: React.FC<SettingsTabProps> = ({
   settings,
   onSettingChange,
   onExport,
   onImport,
   onThemeChange,
-  onReset,
+  // onReset, // Removed as unused in this component
 }) => (
   <div className="space-y-8">
     {/* Display Settings */}
