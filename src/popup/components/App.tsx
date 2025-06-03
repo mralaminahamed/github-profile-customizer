@@ -55,9 +55,11 @@ export const App: React.FC = () => {
 
   // Create curried version of handleSettingChange for compatibility
   const handleSettingChangeCurried = React.useCallback(
-    (key: keyof Settings) => (value: any) => {
-      updateSettings({ [key]: value });
-    },
+    <K extends keyof Settings>(key: K) =>
+      (value: Settings[K]) => {
+        const newSettingUpdate: Partial<Settings> = { [key]: value };
+        updateSettings(newSettingUpdate);
+      },
     [updateSettings]
   );
 

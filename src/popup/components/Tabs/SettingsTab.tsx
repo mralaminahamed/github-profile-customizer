@@ -40,7 +40,7 @@ const SettingsTab: React.FC<SettingsTabProps> = ({
         },
       ]}
       settings={settings}
-      onChange={onSettingChange}
+      onChange={onSettingChange || (() => () => {})}
     />
 
     {/* Theme Customization */}
@@ -65,7 +65,7 @@ const SettingsTab: React.FC<SettingsTabProps> = ({
         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Custom Colors</h4>
         <ColorPicker
           value={settings.customAccentColor || '#0969DA'}
-          onChange={(color: any) => onSettingChange('customAccentColor')(color)}
+          onChange={(color: string) => onSettingChange?.('customAccentColor')(color)}
           presetColors={THEMES.map((theme) => theme.accentColor)}
         />
       </div>
@@ -96,7 +96,7 @@ const SettingsTab: React.FC<SettingsTabProps> = ({
         },
       ]}
       settings={settings}
-      onChange={onSettingChange}
+      onChange={onSettingChange || (() => () => {})}
     />
 
     {/* Settings Management */}

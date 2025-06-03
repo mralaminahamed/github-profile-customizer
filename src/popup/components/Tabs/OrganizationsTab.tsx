@@ -26,7 +26,7 @@ interface OrganizationsTabProps extends TabProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
   filters: OrganizationFilters;
-  onFilterChange: (key: keyof OrganizationFilters, value: any) => void;
+  onFilterChange: <K extends keyof OrganizationFilters>(key: K, value: OrganizationFilters[K]) => void;
   onUpdateVisibility: (orgName: string, isHidden: boolean) => Promise<void>;
   onBatchUpdateVisibility: (orgNames: string[], isHidden: boolean) => Promise<void>;
   error?: string;

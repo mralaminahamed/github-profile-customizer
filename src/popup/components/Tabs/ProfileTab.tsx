@@ -32,7 +32,7 @@ export const ProfileTab: React.FC<TabProps> = ({ settings, onSettingChange }) =>
       );
 
       relevantSections.forEach((section) => {
-        onSettingChange(section.setting)(action === 'hideAll');
+        onSettingChange?.(section.setting)(action === 'hideAll');
       });
     },
     [onSettingChange]
@@ -95,7 +95,7 @@ export const ProfileTab: React.FC<TabProps> = ({ settings, onSettingChange }) =>
           setting: section.setting,
         }))}
         settings={settings}
-        onChange={onSettingChange}
+        onChange={onSettingChange || (() => () => {})}
       />
 
       {/* Contact Information */}
@@ -109,7 +109,7 @@ export const ProfileTab: React.FC<TabProps> = ({ settings, onSettingChange }) =>
           setting: section.setting,
         }))}
         settings={settings}
-        onChange={onSettingChange}
+        onChange={onSettingChange || (() => () => {})}
       />
 
       {/* Repository Information */}
@@ -123,7 +123,7 @@ export const ProfileTab: React.FC<TabProps> = ({ settings, onSettingChange }) =>
           setting: section.setting,
         }))}
         settings={settings}
-        onChange={onSettingChange}
+        onChange={onSettingChange || (() => () => {})}
       >
         <div className="flex gap-2 mt-4">
           <QuickActionButton
@@ -160,7 +160,7 @@ export const ProfileTab: React.FC<TabProps> = ({ settings, onSettingChange }) =>
           setting: section.setting,
         }))}
         settings={settings}
-        onChange={onSettingChange}
+        onChange={onSettingChange || (() => () => {})}
       />
     </div>
   );

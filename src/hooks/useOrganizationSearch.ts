@@ -27,7 +27,7 @@ interface UseOrganizationSearchReturn {
 
   // Actions
   setSearchTerm: (term: string) => void;
-  setFilter: (key: keyof OrganizationFilters, value: any) => void;
+  setFilter: <K extends keyof OrganizationFilters>(key: K, value: OrganizationFilters[K]) => void;
   resetFilters: () => void;
 
   // Results
@@ -136,7 +136,7 @@ export function useOrganizationSearch({
   }, [organizations]);
 
   // Set individual filter value
-  const setFilter = React.useCallback((key: keyof OrganizationFilters, value: any) => {
+  const setFilter = React.useCallback(<K extends keyof OrganizationFilters>(key: K, value: OrganizationFilters[K]) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,

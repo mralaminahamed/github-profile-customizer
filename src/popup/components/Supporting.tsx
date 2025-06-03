@@ -69,7 +69,7 @@ interface SettingsGroupProps {
     setting: keyof Settings;
   }>;
   settings: Settings;
-  onChange: (key: keyof Settings) => (value: any) => void;
+  onChange: <K extends keyof Settings>(key: K) => (value: Settings[K]) => void;
   children?: React.ReactNode;
 }
 
