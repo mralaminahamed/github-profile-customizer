@@ -19,10 +19,6 @@ export async function getManifest() {
       },
       default_popup: './index.html',
     },
-    // options_ui: {
-    //   page: './options/index.html',
-    //   open_in_tab: true,
-    // },
     background: {
       service_worker: 'background/index.js',
     },

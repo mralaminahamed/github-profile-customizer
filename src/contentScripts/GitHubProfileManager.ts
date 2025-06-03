@@ -1,5 +1,6 @@
 // src/contentScripts/GitHubProfileManager.ts
 import type { Organization, OrganizationStats, Settings } from '@/types';
+import { DEFAULT_SETTINGS } from '@/constants';
 import { SELECTORS } from './constants';
 
 export class GitHubProfileManager {
@@ -109,53 +110,12 @@ export class GitHubProfileManager {
   private async loadSettings(): Promise<void> {
     try {
       const { settings } = await chrome.storage.sync.get('settings');
-      this.settings = settings || this.getDefaultSettings();
+      this.settings = settings || DEFAULT_SETTINGS;
       this.applyThemeSettings();
     } catch (error) {
       console.error('Failed to load settings:', error);
-      this.settings = this.getDefaultSettings();
+      this.settings = DEFAULT_SETTINGS;
     }
-  }
-
-  private getDefaultSettings(): Settings {
-    return {
-      hideActivity: false,
-      hideRepositories: false,
-      hideContributions: false,
-      hideAllOrgs: false,
-      hiddenOrgs: [],
-      hideSponsors: false,
-      hideAchievements: false,
-      hideStatus: false,
-      hideFollowers: false,
-      hideFollowing: false,
-      hideLocation: false,
-      hideBio: false,
-      hideEmail: false,
-      hideCompany: false,
-      hideWebsite: false,
-      hideTwitter: false,
-      hidePinnedRepos: false,
-      hidePopularRepos: false,
-      hideLanguageStats: false,
-      hideContributorsSection: false,
-      hideRepoDescription: false,
-      hideActivityGraph: false,
-      hideActivityOverview: false,
-      hideContributionStreak: false,
-      hidePrivateContributions: false,
-      hideReadme: false,
-      hidePackages: false,
-      hideHighlights: false,
-      hideDiscussions: false,
-      hideProjects: false,
-      enableDarkMode: false,
-      customAccentColor: null,
-      compactMode: false,
-      orgViewMode: 'grid',
-      orgSortOrder: 'name',
-      orgGrouping: 'none',
-    };
   }
 
   private setupThemeObserver() {
@@ -405,7 +365,7 @@ export class GitHubProfileManager {
 
   public async resetSettings(): Promise<boolean> {
     try {
-      this.settings = this.getDefaultSettings();
+      this.settings = DEFAULT_SETTINGS;
       await chrome.storage.sync.set({ settings: this.settings });
       this.applySettings();
       return true;

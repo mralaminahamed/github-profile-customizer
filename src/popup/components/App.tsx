@@ -125,9 +125,6 @@ export const App: React.FC = () => {
     </header>
   );
 
-  console.log('settingsError: ', settingsError)
-  console.log('orgsError: ', orgsError)
-
   return (
     <div className={clsx(
       'w-[450px] min-h-screen',
