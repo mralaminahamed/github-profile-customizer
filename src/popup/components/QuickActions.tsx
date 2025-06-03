@@ -6,7 +6,7 @@ import {
   KeyIcon,
   MoonIcon,
   SunIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { KEYBOARD_SHORTCUTS, THEMES } from '@/constants';
 import type { Settings, Theme } from '@/types';
@@ -21,20 +21,31 @@ interface QuickActionsProps {
   onExport: () => void;
 }
 
-export const QuickActions: React.FC<QuickActionsProps> = ({ settings, theme, onThemeChange, onToggleKeyboardShortcuts, onImport, onExport }) => (
+export const QuickActions: React.FC<QuickActionsProps> = ({
+  settings,
+  theme,
+  onThemeChange,
+  onToggleKeyboardShortcuts,
+  onImport,
+  onExport,
+}) => (
   <div className="flex items-center gap-2">
     {/* Theme Selector */}
     <Menu as="div" className="relative">
-      <Menu.Button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg
-        transition-colors duration-200">
+      <Menu.Button
+        className="p-2 text-gray-500 hover:text-gray-700 rounded-lg
+        transition-colors duration-200"
+      >
         {settings.enableDarkMode ? (
           <MoonIcon className="w-5 h-5" />
         ) : (
           <SunIcon className="w-5 h-5" />
         )}
       </Menu.Button>
-      <Menu.Items className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg
-        shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+      <Menu.Items
+        className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg
+        shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+      >
         {THEMES.map((themeOption) => (
           <Menu.Item key={themeOption.name}>
             {({ active }) => (
@@ -61,12 +72,16 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ settings, theme, onT
 
     {/* Import/Export */}
     <Menu as="div" className="relative">
-      <Menu.Button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg
-        transition-colors duration-200">
+      <Menu.Button
+        className="p-2 text-gray-500 hover:text-gray-700 rounded-lg
+        transition-colors duration-200"
+      >
         <DocumentDuplicateIcon className="w-5 h-5" />
       </Menu.Button>
-      <Menu.Items className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg
-        shadow-lg focus:outline-none z-50">
+      <Menu.Items
+        className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg
+        shadow-lg focus:outline-none z-50"
+      >
         <Menu.Item>
           {({ active }) => (
             <button
@@ -121,11 +136,13 @@ interface ErrorAlertProps {
 }
 
 export const ErrorAlert: React.FC<ErrorAlertProps> = ({ message, className }) => (
-  <div className={clsx(
-    'flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 rounded-lg',
-    'dark:text-red-400 dark:bg-red-900/30',
-    className
-  )}>
+  <div
+    className={clsx(
+      'flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 rounded-lg',
+      'dark:text-red-400 dark:bg-red-900/30',
+      className
+    )}
+  >
     <ExclamationCircleIcon className="w-5 h-5 flex-shrink-0" />
     <p>{message}</p>
   </div>
@@ -153,15 +170,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
       <div className="space-y-3">
         {KEYBOARD_SHORTCUTS.map(({ key, description }) => (
           <div key={key} className="flex items-center justify-between">
-            <span className="text-sm text-gray-600 dark:text-gray-300">
-              {description}
-            </span>
-            <kbd className={clsx(
-              'px-2 py-1 text-xs font-semibold rounded-md',
-              'bg-gray-100 dark:bg-gray-700',
-              'border border-gray-200 dark:border-gray-600',
-              'text-gray-800 dark:text-gray-200'
-            )}>
+            <span className="text-sm text-gray-600 dark:text-gray-300">{description}</span>
+            <kbd
+              className={clsx(
+                'px-2 py-1 text-xs font-semibold rounded-md',
+                'bg-gray-100 dark:bg-gray-700',
+                'border border-gray-200 dark:border-gray-600',
+                'text-gray-800 dark:text-gray-200'
+              )}
+            >
               {key}
             </kbd>
           </div>

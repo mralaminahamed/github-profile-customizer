@@ -1,10 +1,7 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 export default {
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './src/**/*.html',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './src/**/*.html'],
   theme: {
     extend: {
       fontFamily: {
@@ -41,4 +38,4 @@ export default {
       strategy: 'class',
     }),
   ],
-} satisfies Config
+} satisfies Config;

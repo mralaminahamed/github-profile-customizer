@@ -1,8 +1,8 @@
-import type { Settings, Organization, Theme } from './index'
+import type { Settings, Organization, Theme } from './index';
 
 // Base message interface
 interface BaseMessage {
-  type: MessageType
+  type: MessageType;
 }
 
 // Message Types
@@ -16,90 +16,90 @@ export type MessageType =
   | 'updateTheme'
   | 'toggleDarkMode'
   | 'toggleCompactMode'
-  | 'getOrganizationStats'
+  | 'getOrganizationStats';
 
 // Individual Message Interfaces
 export interface GetOrganizationsMessage extends BaseMessage {
-  type: 'getOrganizations'
+  type: 'getOrganizations';
 }
 
 export interface UpdateSettingsMessage extends BaseMessage {
-  type: 'updateSettings'
-  settings: Partial<Settings>
+  type: 'updateSettings';
+  settings: Partial<Settings>;
 }
 
 export interface GetStateMessage extends BaseMessage {
-  type: 'getState'
+  type: 'getState';
 }
 
 export interface UpdateOrganizationVisibilityMessage extends BaseMessage {
-  type: 'updateOrganizationVisibility'
-  organizationName: string
-  isHidden: boolean
+  type: 'updateOrganizationVisibility';
+  organizationName: string;
+  isHidden: boolean;
 }
 
 export interface BatchUpdateOrganizationVisibilityMessage extends BaseMessage {
-  type: 'batchUpdateOrganizationVisibility'
-  organizationNames: string[]
-  isHidden: boolean
+  type: 'batchUpdateOrganizationVisibility';
+  organizationNames: string[];
+  isHidden: boolean;
 }
 
 export interface ResetSettingsMessage extends BaseMessage {
-  type: 'resetSettings'
+  type: 'resetSettings';
 }
 
 export interface UpdateThemeMessage extends BaseMessage {
-  type: 'updateTheme'
-  accentColor: string | null
+  type: 'updateTheme';
+  accentColor: string | null;
 }
 
 export interface ToggleDarkModeMessage extends BaseMessage {
-  type: 'toggleDarkMode'
-  enabled?: boolean
+  type: 'toggleDarkMode';
+  enabled?: boolean;
 }
 
 export interface ToggleCompactModeMessage extends BaseMessage {
-  type: 'toggleCompactMode'
-  enabled?: boolean
+  type: 'toggleCompactMode';
+  enabled?: boolean;
 }
 
 export interface GetOrganizationStatsMessage extends BaseMessage {
-  type: 'getOrganizationStats'
+  type: 'getOrganizationStats';
 }
 
 // Response Types
 export interface BaseResponse {
-  success?: boolean
-  error?: string
+  success?: boolean;
+  error?: string;
 }
 
 export interface SuccessResponse extends BaseResponse {
-  success: true
+  success: true;
 }
 
 export interface ErrorResponse extends BaseResponse {
-  error: string
+  error: string;
 }
 
 export interface OrganizationsResponse extends SuccessResponse {
-  organizations: Organization[]
+  organizations: Organization[];
 }
 
 export interface StateResponse extends SuccessResponse {
-  initialized: boolean
-  settings: Settings | null
+  initialized: boolean;
+  settings: Settings | null;
 }
 
 export interface OrganizationStatsResponse extends SuccessResponse {
   stats: {
-    total: number
-    visible: number
-    hidden: number
-  }
+    total: number;
+    visible: number;
+    hidden: number;
+  };
 }
 
 export interface ThemeResponse extends SuccessResponse {
-  theme: Theme
+  theme: Theme;
 }
 
 // Union type for all possible messages
@@ -113,7 +113,7 @@ export type Message =
   | UpdateThemeMessage
   | ToggleDarkModeMessage
   | ToggleCompactModeMessage
-  | GetOrganizationStatsMessage
+  | GetOrganizationStatsMessage;
 
 // Union type for all possible responses
 export type MessageResponse =
@@ -122,7 +122,7 @@ export type MessageResponse =
   | OrganizationStatsResponse
   | ThemeResponse
   | SuccessResponse
-  | ErrorResponse
+  | ErrorResponse;
 
 // Helper function to create messages with type safety
 export function createMessage<T extends MessageType>(
@@ -132,64 +132,58 @@ export function createMessage<T extends MessageType>(
   return {
     type,
     ...args,
-  } as MessageForType<T>
+  } as MessageForType<T>;
 }
 
 // Type helpers for createMessage function
-type MessageForType<T extends MessageType> = Extract<Message, { type: T }>
+type MessageForType<T extends MessageType> = Extract<Message, { type: T }>;
 
-type MessageArgs<T extends MessageType> = Omit<MessageForType<T>, 'type'>
+type MessageArgs<T extends MessageType> = Omit<MessageForType<T>, 'type'>;
 
 // Type guard functions
 export function isSuccessResponse(response: MessageResponse): response is SuccessResponse {
-  return 'success' in response && response.success === true
+  return 'success' in response && response.success === true;
 }
 
 export function isErrorResponse(response: MessageResponse): response is ErrorResponse {
-  return 'error' in response
+  return 'error' in response;
 }
 
 export function isOrganizationsResponse(
   response: MessageResponse
 ): response is OrganizationsResponse {
-  return 'organizations' in response
+  return 'organizations' in response;
 }
 
-export function isStateResponse(
-  response: MessageResponse
-): response is StateResponse {
-  return 'initialized' in response && 'settings' in response
+export function isStateResponse(response: MessageResponse): response is StateResponse {
+  return 'initialized' in response && 'settings' in response;
 }
 
 export function isOrganizationStatsResponse(
   response: MessageResponse
 ): response is OrganizationStatsResponse {
-  return 'stats' in response && isSuccessResponse(response)
+  return 'stats' in response && isSuccessResponse(response);
 }
 
-export function isThemeResponse(
-  response: MessageResponse
-): response is ThemeResponse {
-  return 'theme' in response && isSuccessResponse(response)
+export function isThemeResponse(response: MessageResponse): response is ThemeResponse {
+  return 'theme' in response && isSuccessResponse(response);
 }
 
 /**
  * Helper function to send messages to the content script
  */
-export async function sendMessage<T extends Message>(
-  message: T
-): Promise<MessageResponse> {
+export async function sendMessage<T extends Message>(message: T): Promise<MessageResponse> {
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab?.id) {
-      throw new Error('No active tab found')
+      throw new Error('No active tab found');
     }
 
-    return await chrome.tabs.sendMessage(tab.id, message)
+    return await chrome.tabs.sendMessage(tab.id, message);
   } catch (error) {
     return {
-      error: error instanceof Error ? error.message : 'Failed to send message'
-    }
+      error: error instanceof Error ? error.message : 'Failed to send message',
+    };
   }
 }
 

@@ -11,20 +11,44 @@ import ProfileTab from '@/popup/components/Tabs/ProfileTab';
 import ActivityTab from '@/popup/components/Tabs/ActivityTab';
 import OrganizationsTab from '@/popup/components/Tabs/OrganizationsTab';
 import SettingsTab from '@/popup/components/Tabs/SettingsTab';
-import { ActivityTabSkeleton, ProfileTabSkeleton, SettingsTabSkeleton } from '@/popup/components/Skeletons';
+import {
+  ActivityTabSkeleton,
+  ProfileTabSkeleton,
+  SettingsTabSkeleton,
+} from '@/popup/components/Skeletons';
 import AppIcon from '@/popup/components/AppIcon';
 
 export const App: React.FC = () => {
-  const { settings, updateSettings, resetSettings, isSaving, isLoading: isLoadingSettings, error: settingsError, theme, setTheme, exportSettings, importSettings } = useSettings();
-  const { organizations, stats, isLoading: isLoadingOrgs, error: orgsError, refreshOrganizations, updateOrganizationVisibility, batchUpdateOrganizationVisibility } = useOrganizations();
-  const { searchTerm, setSearchTerm, filters, setFilter, filteredOrganizations, resetFilters } = useOrganizationSearch({
+  const {
+    settings,
+    updateSettings,
+    resetSettings,
+    isSaving,
+    isLoading: isLoadingSettings,
+    error: settingsError,
+    theme,
+    setTheme,
+    exportSettings,
+    importSettings,
+  } = useSettings();
+  const {
     organizations,
-    defaultFilters: {
-      viewMode: settings.orgViewMode,
-      sortOrder: settings.orgSortOrder,
-      grouping: settings.orgGrouping
-    }
-  });
+    stats,
+    isLoading: isLoadingOrgs,
+    error: orgsError,
+    refreshOrganizations,
+    updateOrganizationVisibility,
+    batchUpdateOrganizationVisibility,
+  } = useOrganizations();
+  const { searchTerm, setSearchTerm, filters, setFilter, filteredOrganizations, resetFilters } =
+    useOrganizationSearch({
+      organizations,
+      defaultFilters: {
+        viewMode: settings.orgViewMode,
+        sortOrder: settings.orgSortOrder,
+        grouping: settings.orgGrouping,
+      },
+    });
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = React.useState(false);
@@ -42,13 +66,15 @@ export const App: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey) {
         const keyMap: Record<string, () => void> = {
-          's': () => { if (!isSaving) updateSettings(settings); },
-          'r': handleReset,
-          'f': () => document.querySelector<HTMLInputElement>('[data-search-input]')?.focus(),
-          'd': () => handleThemeChange(settings.enableDarkMode ? THEMES[0] : THEMES[1]),
-          'm': () => handleSettingChangeCurried('compactMode')(!settings.compactMode),
-          'e': exportSettings,
-          'i': () => document.querySelector<HTMLInputElement>('[data-import-input]')?.click()
+          s: () => {
+            if (!isSaving) updateSettings(settings);
+          },
+          r: handleReset,
+          f: () => document.querySelector<HTMLInputElement>('[data-search-input]')?.focus(),
+          d: () => handleThemeChange(settings.enableDarkMode ? THEMES[0] : THEMES[1]),
+          m: () => handleSettingChangeCurried('compactMode')(!settings.compactMode),
+          e: exportSettings,
+          i: () => document.querySelector<HTMLInputElement>('[data-import-input]')?.click(),
         };
 
         const action = keyMap[e.key.toLowerCase()];
@@ -63,13 +89,16 @@ export const App: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [settings, isSaving, updateSettings]);
 
-  const handleThemeChange = React.useCallback(async (newTheme: Theme) => {
-    try {
-      await setTheme(newTheme);
-    } catch (error) {
-      console.error('Failed to update theme:', error);
-    }
-  }, [setTheme]);
+  const handleThemeChange = React.useCallback(
+    async (newTheme: Theme) => {
+      try {
+        await setTheme(newTheme);
+      } catch (error) {
+        console.error('Failed to update theme:', error);
+      }
+    },
+    [setTheme]
+  );
 
   const handleReset = React.useCallback(async () => {
     if (window.confirm('Reset all settings to default?')) {
@@ -82,28 +111,31 @@ export const App: React.FC = () => {
     }
   }, [resetSettings, resetFilters]);
 
-  const handleImport = React.useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleImport = React.useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
 
-    try {
-      const text = await file.text();
-      const importedSettings = JSON.parse(text);
-      await importSettings(importedSettings);
-    } catch (error) {
-      console.error('Failed to import settings:', error);
-    }
+      try {
+        const text = await file.text();
+        const importedSettings = JSON.parse(text);
+        await importSettings(importedSettings);
+      } catch (error) {
+        console.error('Failed to import settings:', error);
+      }
 
-    // Reset input
-    event.target.value = '';
-  }, [importSettings]);
+      // Reset input
+      event.target.value = '';
+    },
+    [importSettings]
+  );
 
   // Render header with app title and quick actions
   const renderHeader = () => (
     <header className="flex items-start justify-between mb-8">
       <div className="flex items-center gap-3">
         <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
-          <AppIcon size={40}/>
+          <AppIcon size={40} />
         </div>
         <div>
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -126,12 +158,14 @@ export const App: React.FC = () => {
   );
 
   return (
-    <div className={clsx(
-      'w-[450px] min-h-screen',
-      'bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800',
-      'transition-colors duration-200',
-      settings.compactMode ? 'p-4' : 'p-6'
-    )}>
+    <div
+      className={clsx(
+        'w-[450px] min-h-screen',
+        'bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800',
+        'transition-colors duration-200',
+        settings.compactMode ? 'p-4' : 'p-6'
+      )}
+    >
       {renderHeader()}
 
       {/* Error Alert */}
@@ -145,13 +179,15 @@ export const App: React.FC = () => {
           {TABS.map((tab) => (
             <Tab
               key={tab.id}
-              className={({ selected }) => clsx(
-                'w-full py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2',
-                'focus:outline-none transition-colors duration-200',
-                selected
-                  ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
-              )}
+              className={({ selected }) =>
+                clsx(
+                  'w-full py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2',
+                  'focus:outline-none transition-colors duration-200',
+                  selected
+                    ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                )
+              }
             >
               <tab.icon className="w-4 h-4" />
               {tab.name}
@@ -163,20 +199,14 @@ export const App: React.FC = () => {
             {isLoadingSettings ? (
               <ProfileTabSkeleton />
             ) : (
-              <ProfileTab
-                settings={settings}
-                onSettingChange={handleSettingChangeCurried}
-              />
+              <ProfileTab settings={settings} onSettingChange={handleSettingChangeCurried} />
             )}
           </Tab.Panel>
           <Tab.Panel>
             {isLoadingSettings ? (
               <ActivityTabSkeleton />
             ) : (
-              <ActivityTab
-                settings={settings}
-                onSettingChange={handleSettingChangeCurried}
-              />
+              <ActivityTab settings={settings} onSettingChange={handleSettingChangeCurried} />
             )}
           </Tab.Panel>
           <Tab.Panel>
@@ -184,25 +214,25 @@ export const App: React.FC = () => {
               <ActivityTabSkeleton />
             ) : (
               <OrganizationsTab
-              settings={settings}
-              organizations={filteredOrganizations}
-              stats={stats!}
-              isLoading={isLoadingOrgs}
-              onRefresh={refreshOrganizations}
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-              filters={filters!}
-              onFilterChange={setFilter}
-              onUpdateVisibility={updateOrganizationVisibility}
-              onBatchUpdateVisibility={batchUpdateOrganizationVisibility}
-              onSettingChange={handleSettingChangeCurried}
-            />
+                settings={settings}
+                organizations={filteredOrganizations}
+                stats={stats!}
+                isLoading={isLoadingOrgs}
+                onRefresh={refreshOrganizations}
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                filters={filters!}
+                onFilterChange={setFilter}
+                onUpdateVisibility={updateOrganizationVisibility}
+                onBatchUpdateVisibility={batchUpdateOrganizationVisibility}
+                onSettingChange={handleSettingChangeCurried}
+              />
             )}
           </Tab.Panel>
           <Tab.Panel>
-            { isLoadingSettings ? (
-              <SettingsTabSkeleton/>
-              ) : (
+            {isLoadingSettings ? (
+              <SettingsTabSkeleton />
+            ) : (
               <SettingsTab
                 settings={settings}
                 onSettingChange={handleSettingChangeCurried}

@@ -5,14 +5,10 @@ interface ProfileCustomizerIconProps {
   className?: string;
 }
 
-const AppIcon: React.FC<ProfileCustomizerIconProps> = ({ size = 32, className = '', }) => {
+const AppIcon: React.FC<ProfileCustomizerIconProps> = ({ size = 32, className = '' }) => {
   return (
     <div className={className} style={{ width: size, height: size }}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 128 128"
-        className="w-full h-full"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" className="w-full h-full">
         {/* Background gradient */}
         <defs>
           <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">

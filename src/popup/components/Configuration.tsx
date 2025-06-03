@@ -1,11 +1,11 @@
-import React from 'react'
-import clsx from 'clsx'
-import type { Settings } from '@/types'
+import React from 'react';
+import clsx from 'clsx';
+import type { Settings } from '@/types';
 
 interface ColorPickerProps {
-  value: string
-  onChange: (color: string) => void
-  presetColors: string[]
+  value: string;
+  onChange: (color: string) => void;
+  presetColors: string[];
 }
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, presetColors }) => (
@@ -42,31 +42,31 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, prese
       ))}
     </div>
   </div>
-)
+);
 
 interface ExportImportProps {
-  onExport: () => void
-  onImport: (settings: Settings) => void
+  onExport: () => void;
+  onImport: (settings: Settings) => void;
 }
 
 export const ExportImport: React.FC<ExportImportProps> = ({ onExport, onImport }) => {
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const settings = JSON.parse(e.target?.result as string)
-        onImport(settings)
+        const settings = JSON.parse(e.target?.result as string);
+        onImport(settings);
       } catch (error) {
-        console.error('Failed to parse settings file:', error)
+        console.error('Failed to parse settings file:', error);
       }
-    }
-    reader.readAsText(file)
-  }
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <div className="flex gap-2">
@@ -94,5 +94,5 @@ export const ExportImport: React.FC<ExportImportProps> = ({ onExport, onImport }
         Import Settings
       </button>
     </div>
-  )
-}
+  );
+};

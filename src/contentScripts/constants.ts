@@ -10,6 +10,9 @@ export const SELECTORS = {
     popularRepos: '.js-profile-repositories-section', // Section listing popular repositories
   },
   organizations: {
+    // VERY FRAGILE: This selector relies on a specific combination of GitHub's Primer CSS utility classes.
+    // It is highly likely to break if GitHub makes styling changes to profile pages.
+    // Finding a more robust selector for this container is a high priority for future improvement.
     container: '.border-top.color-border-muted.pt-3.mt-3.clearfix.hide-sm.hide-md', // Main container for organizations list
     items: '.avatar-group-item', // Individual organization avatar items
   },

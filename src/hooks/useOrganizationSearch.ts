@@ -1,5 +1,11 @@
 import React from 'react';
-import type { Organization, OrganizationType, OrgSortOrder, OrgViewMode, OrgGrouping } from '@/types';
+import type {
+  Organization,
+  OrganizationType,
+  OrgSortOrder,
+  OrgViewMode,
+  OrgGrouping,
+} from '@/types';
 
 export interface OrganizationFilters {
   type?: OrganizationType;
@@ -41,15 +47,18 @@ const defaultFilters: OrganizationFilters = {
   visibility: 'all',
   sortOrder: 'name',
   viewMode: 'grid',
-  grouping: 'none'
+  grouping: 'none',
 };
 
-export function useOrganizationSearch({ organizations, defaultFilters: initialFilters = {} }: UseOrganizationSearchProps): UseOrganizationSearchReturn {
+export function useOrganizationSearch({
+  organizations,
+  defaultFilters: initialFilters = {},
+}: UseOrganizationSearchProps): UseOrganizationSearchReturn {
   // State
   const [searchTerm, setSearchTerm] = React.useState('');
   const [filters, setFilters] = React.useState<OrganizationFilters>({
     ...defaultFilters,
-    ...initialFilters
+    ...initialFilters,
   });
 
   // Filter organizations based on search term and filters
@@ -59,21 +68,22 @@ export function useOrganizationSearch({ organizations, defaultFilters: initialFi
     // Apply text search
     if (searchTerm.trim()) {
       const searchRegex = new RegExp(searchTerm.trim(), 'i');
-      filtered = filtered.filter(org =>
-        searchRegex.test(org.name) ||
-        searchRegex.test(org.description || '') ||
-        searchRegex.test(org.type)
+      filtered = filtered.filter(
+        (org) =>
+          searchRegex.test(org.name) ||
+          searchRegex.test(org.description || '') ||
+          searchRegex.test(org.type)
       );
     }
 
     // Apply type filter
     if (filters.type) {
-      filtered = filtered.filter(org => org.type === filters.type);
+      filtered = filtered.filter((org) => org.type === filters.type);
     }
 
     // Apply visibility filter
     if (filters.visibility !== 'all') {
-      filtered = filtered.filter(org =>
+      filtered = filtered.filter((org) =>
         filters.visibility === 'hidden' ? org.isHidden : !org.isHidden
       );
     }
@@ -106,27 +116,30 @@ export function useOrganizationSearch({ organizations, defaultFilters: initialFi
 
   // Calculate stats
   const stats = React.useMemo(() => {
-    const visibleCount = organizations.filter(org => !org.isHidden).length;
+    const visibleCount = organizations.filter((org) => !org.isHidden).length;
     const hiddenCount = organizations.length - visibleCount;
 
     // Count organizations by type
-    const typeStats = organizations.reduce((acc, org) => {
-      acc[org.type] = (acc[org.type] || 0) + 1;
-      return acc;
-    }, {} as Record<OrganizationType, number>);
+    const typeStats = organizations.reduce(
+      (acc, org) => {
+        acc[org.type] = (acc[org.type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<OrganizationType, number>
+    );
 
     return {
       visibleCount,
       hiddenCount,
-      typeStats
+      typeStats,
     };
   }, [organizations]);
 
   // Set individual filter value
   const setFilter = React.useCallback((key: keyof OrganizationFilters, value: any) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   }, []);
 
@@ -137,14 +150,13 @@ export function useOrganizationSearch({ organizations, defaultFilters: initialFi
   }, []);
 
   // Check if any filters are active
-  const isFiltered = React.useMemo(() =>
+  const isFiltered = React.useMemo(
+    () =>
       Boolean(
-        searchTerm ||
-        filters.type ||
-        filters.visibility !== 'all' ||
-        filters.sortOrder !== 'name'
-      )
-    , [searchTerm, filters]);
+        searchTerm || filters.type || filters.visibility !== 'all' || filters.sortOrder !== 'name'
+      ),
+    [searchTerm, filters]
+  );
 
   return {
     // Search state
@@ -166,6 +178,6 @@ export function useOrganizationSearch({ organizations, defaultFilters: initialFi
     // Stats
     visibleCount: stats.visibleCount,
     hiddenCount: stats.hiddenCount,
-    typeStats: stats.typeStats
+    typeStats: stats.typeStats,
   };
 }

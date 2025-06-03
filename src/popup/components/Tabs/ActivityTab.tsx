@@ -18,20 +18,20 @@ const ActivityTab: React.FC<TabProps> = ({ settings, onSettingChange }) => (
           id: 'activityGraph',
           title: 'Contribution Graph',
           description: 'Your activity heatmap',
-          setting: 'hideActivityGraph'
+          setting: 'hideActivityGraph',
         },
         {
           id: 'activityStreak',
           title: 'Contribution Streak',
           description: 'Your daily contribution streak',
-          setting: 'hideContributionStreak'
+          setting: 'hideContributionStreak',
         },
         {
           id: 'privateContributions',
           title: 'Private Contributions',
           description: 'Contributions to private repositories',
-          setting: 'hidePrivateContributions'
-        }
+          setting: 'hidePrivateContributions',
+        },
       ]}
       settings={settings}
       onChange={onSettingChange}
@@ -46,31 +46,31 @@ const ActivityTab: React.FC<TabProps> = ({ settings, onSettingChange }) => (
           id: 'activityOverview',
           title: 'Activity Overview',
           description: 'Summary of your recent activity',
-          setting: 'hideActivityOverview'
+          setting: 'hideActivityOverview',
         },
         {
           id: 'highlights',
           title: 'Highlights',
           description: 'Notable contributions and achievements',
-          setting: 'hideHighlights'
+          setting: 'hideHighlights',
         },
         {
           id: 'sponsorships',
           title: 'Sponsorships',
           description: 'GitHub Sponsors information',
-          setting: 'hideSponsors'
+          setting: 'hideSponsors',
         },
         {
           id: 'achievements',
           title: 'Achievements',
           description: 'GitHub Achievements and badges',
-          setting: 'hideAchievements'
-        }
+          setting: 'hideAchievements',
+        },
       ]}
       settings={settings}
       onChange={onSettingChange}
     />
   </div>
-)
+);
 
 export default ActivityTab;

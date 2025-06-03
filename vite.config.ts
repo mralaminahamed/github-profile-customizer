@@ -1,14 +1,14 @@
-import { type UserConfig, type ConfigEnv, defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-import tailwind from 'tailwindcss'
-import autoprefixer from 'autoprefixer'
-import { visualizer } from 'rollup-plugin-visualizer'
-import { VitePWA } from 'vite-plugin-pwa'
-import checker from 'vite-plugin-checker'
+import { type UserConfig, type ConfigEnv, defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import tailwind from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { VitePWA } from 'vite-plugin-pwa';
+import checker from 'vite-plugin-checker';
 
-const isDev = process.env.NODE_ENV !== 'production'
-const r = (...args: string[]) => resolve(__dirname, ...args)
+const isDev = process.env.NODE_ENV !== 'production';
+const r = (...args: string[]) => resolve(__dirname, ...args);
 
 // Shared CSS configuration
 const cssConfig = {
@@ -22,9 +22,9 @@ const cssConfig = {
   },
   modules: {
     localsConvention: 'camelCase',
-    generateScopedName: isDev ? '[name]__[local]__[hash:base64:5]' : '[hash:base64:8]'
-  }
-}
+    generateScopedName: isDev ? '[name]__[local]__[hash:base64:5]' : '[hash:base64:8]',
+  },
+};
 
 // Enhanced chunk splitting strategy
 const CHUNKS = {
@@ -36,19 +36,19 @@ const CHUNKS = {
   charts: ['recharts', 'd3', 'chart.js'],
   animation: ['@react-spring/web', 'react-transition-group', 'react-move'],
   i18n: ['i18next', 'react-i18next'],
-}
+};
 
 // Improved chunk splitting with size-based optimization
 function createManualChunks(id: string) {
   if (id.includes('node_modules')) {
     // Find which chunk group this dependency belongs to
     for (const [name, deps] of Object.entries(CHUNKS)) {
-      if (deps.some(dep => id.includes(dep))) {
-        return `vendor-${name}`
+      if (deps.some((dep) => id.includes(dep))) {
+        return `vendor-${name}`;
       }
     }
     // Split large modules into separate chunks
-    return id.length > 50000 ? 'vendor-large' : 'vendor-common'
+    return id.length > 50000 ? 'vendor-large' : 'vendor-common';
   }
 }
 
@@ -57,8 +57,8 @@ const baseConfig: UserConfig = {
   plugins: [
     react({
       babel: {
-        plugins: isDev ? ['react-refresh/babel'] : []
-      }
+        plugins: isDev ? ['react-refresh/babel'] : [],
+      },
     }),
     checker({
       typescript: true,
@@ -66,12 +66,13 @@ const baseConfig: UserConfig = {
         lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
       },
     }),
-    isDev && visualizer({
-      filename: './stats.html',
-      open: false,
-      gzipSize: true,
-      brotliSize: true,
-    }),
+    isDev &&
+      visualizer({
+        filename: './stats.html',
+        open: false,
+        gzipSize: true,
+        brotliSize: true,
+      }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
@@ -120,24 +121,26 @@ const baseConfig: UserConfig = {
     rollupOptions: {
       output: {
         manualChunks: createManualChunks,
-      }
-    }
+      },
+    },
   },
   esbuild: {
     drop: !isDev ? ['console', 'debugger'] : undefined,
     legalComments: 'none',
     jsx: 'automatic',
   },
-  server: isDev ? {
-    port: 3000,
-    strictPort: true,
-    hmr: {
-      overlay: true
-    },
-    watch: {
-      ignored: ['**/coverage/**', '**/node_modules/**', '**/.git/**'],
-    },
-  } : undefined,
+  server: isDev
+    ? {
+        port: 3000,
+        strictPort: true,
+        hmr: {
+          overlay: true,
+        },
+        watch: {
+          ignored: ['**/coverage/**', '**/node_modules/**', '**/.git/**'],
+        },
+      }
+    : undefined,
   preview: {
     port: 3000,
     strictPort: true,
@@ -145,7 +148,7 @@ const baseConfig: UserConfig = {
   optimizeDeps: {
     include: Object.values(CHUNKS).flat(),
   },
-}
+};
 
 // Enhanced main config for popup
 const mainConfig: UserConfig = {
@@ -163,10 +166,8 @@ const mainConfig: UserConfig = {
       output: {
         extend: true,
         manualChunks: createManualChunks,
-        entryFileNames: chunk => {
-          return chunk.name === 'popup' 
-            ? 'popup/index-[hash].js' 
-            : 'assets/js/[name]-[hash].js'
+        entryFileNames: (chunk) => {
+          return chunk.name === 'popup' ? 'popup/index-[hash].js' : 'assets/js/[name]-[hash].js';
         },
         chunkFileNames: (chunkInfo) => {
           if (chunkInfo.name?.startsWith('vendor-')) {
@@ -193,13 +194,13 @@ const mainConfig: UserConfig = {
             webm: 'assets/video/[name]-[hash][extname]',
             pdf: 'assets/docs/[name]-[hash][extname]',
             json: 'assets/data/[name]-[hash][extname]',
-          }
-          return assetMap[ext] || 'assets/[name]-[hash][extname]'
+          };
+          return assetMap[ext] || 'assets/[name]-[hash][extname]';
         },
       },
     },
   },
-}
+};
 
 // Enhanced background script config
 const backgroundConfig: UserConfig = {
@@ -220,7 +221,7 @@ const backgroundConfig: UserConfig = {
       },
     },
   },
-}
+};
 
 // Enhanced content scripts config
 const contentConfig: UserConfig = {
@@ -243,17 +244,17 @@ const contentConfig: UserConfig = {
       },
     },
   },
-}
+};
 
 // Export configurations based on command line arguments with enhanced development features
 export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
-  const config = process.env.VITE_CONFIG
+  const config = process.env.VITE_CONFIG;
 
   if (mode === 'development') {
     // Enable source maps and additional development features
-    backgroundConfig.build!.sourcemap = 'inline'
-    contentConfig.build!.sourcemap = 'inline'
-    mainConfig.build!.sourcemap = 'inline'
+    backgroundConfig.build!.sourcemap = 'inline';
+    contentConfig.build!.sourcemap = 'inline';
+    mainConfig.build!.sourcemap = 'inline';
 
     // Add development-specific plugins
     const devPlugins = [
@@ -264,19 +265,19 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         },
         overlay: true,
       }),
-    ]
+    ];
 
-    backgroundConfig.plugins = [...(backgroundConfig.plugins || []), ...devPlugins]
-    contentConfig.plugins = [...(contentConfig.plugins || []), ...devPlugins]
-    mainConfig.plugins = [...(mainConfig.plugins || []), ...devPlugins]
+    backgroundConfig.plugins = [...(backgroundConfig.plugins || []), ...devPlugins];
+    contentConfig.plugins = [...(contentConfig.plugins || []), ...devPlugins];
+    mainConfig.plugins = [...(mainConfig.plugins || []), ...devPlugins];
   }
 
   switch (config) {
     case 'background':
-      return backgroundConfig
+      return backgroundConfig;
     case 'content':
-      return contentConfig
+      return contentConfig;
     default:
-      return mainConfig
+      return mainConfig;
   }
-})
+});

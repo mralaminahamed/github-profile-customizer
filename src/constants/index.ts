@@ -15,12 +15,12 @@ import {
   ArchiveBoxIcon,
   SparklesIcon,
   ChatBubbleBottomCenterTextIcon,
-  RectangleStackIcon
-} from '@heroicons/react/24/outline'
+  RectangleStackIcon,
+} from '@heroicons/react/24/outline';
 import type { ProfileSection, Theme, KeyboardShortcut, Settings } from '@/types';
 
-export const EXTENSION_ID = 'github-profile-customizer'
-export const EXTENSION_AUTHOR = 'mralaminahamed'
+export const EXTENSION_ID = 'github-profile-customizer';
+export const EXTENSION_AUTHOR = 'mralaminahamed';
 export const GITHUB_ISSUES_URL = `https://github.com/${EXTENSION_AUTHOR}/${EXTENSION_ID}/issues`;
 
 export const TABS = [
@@ -28,7 +28,7 @@ export const TABS = [
   { id: 'activity', name: 'Activity', icon: ChartBarIcon },
   { id: 'organizations', name: 'Organizations', icon: UserGroupIcon },
   { id: 'settings', name: 'Settings', icon: CogIcon },
-]
+];
 
 export const PROFILE_SECTIONS: ProfileSection[] = [
   // Repository Sections
@@ -134,7 +134,7 @@ export const PROFILE_SECTIONS: ProfileSection[] = [
     icon: RectangleStackIcon,
     setting: 'hideProjects',
   },
-]
+];
 
 export const THEMES: Theme[] = [
   {
@@ -165,7 +165,7 @@ export const THEMES: Theme[] = [
     text: '#f0f3f6',
     border: '#6e7681',
   },
-]
+];
 
 export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
   {
@@ -193,7 +193,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     description: 'Toggle compact mode',
     action: () => {},
   },
-]
+];
 
 export const DEFAULT_SETTINGS: Settings = {
   // Profile Features
@@ -245,4 +245,4 @@ export const DEFAULT_SETTINGS: Settings = {
   orgViewMode: 'grid',
   orgSortOrder: 'name',
   orgGrouping: 'none',
-}
+};

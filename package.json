@@ -54,6 +54,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "eslint": "^9.18.0",
+    "globals": "^15.8.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "esno": "^4.8.0",
