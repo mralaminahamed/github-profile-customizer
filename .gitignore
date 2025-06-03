@@ -39,3 +39,4 @@ lerna-debug.log*
 !.env.example
 .DS_Store
 .DS_Store
+*.pem

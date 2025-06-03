@@ -237,8 +237,8 @@ export const useSettings = create<SettingsState>()(
           }
         };
       },
-    },
-  ),
+    }
+  )
 );
 
 // Hook for handling settings initialization

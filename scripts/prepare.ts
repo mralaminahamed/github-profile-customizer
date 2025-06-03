@@ -17,18 +17,17 @@ export async function buildIcons() {
 
   const sizes = [16, 48, 128];
 
-  await Promise.all(sizes.map(size => {
-    return sharp(r('drafts/icon-v2.svg'))
-      .resize(size, size)
-      .toFile(r(`dist/assets/icons/icon-${size}.png`));
-  }));
+  await Promise.all(
+    sizes.map((size) => {
+      return sharp(r('drafts/icon-v2.svg'))
+        .resize(size, size)
+        .toFile(r(`dist/assets/icons/icon-${size}.png`));
+    })
+  );
 }
 
 async function prepare() {
-  await Promise.all([
-    writeManifest(),
-    buildIcons(),
-  ]);
+  await Promise.all([writeManifest(), buildIcons()]);
 }
 
 void prepare();

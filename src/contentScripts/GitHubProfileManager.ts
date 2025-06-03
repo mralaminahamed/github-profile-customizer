@@ -1,5 +1,6 @@
 // src/contentScripts/GitHubProfileManager.ts
 import type { Organization, OrganizationStats, Settings } from '@/types';
+import { DEFAULT_SETTINGS } from '@/constants';
 import { SELECTORS } from './constants';
 
 export class GitHubProfileManager {
@@ -89,7 +90,9 @@ export class GitHubProfileManager {
       }
 
       /* Smooth transitions for all hideable elements */
-      ${Object.values(SELECTORS).flatMap(group => Object.values(group)).join(',\n')} {
+      ${Object.values(SELECTORS)
+        .flatMap((group) => Object.values(group))
+        .join(',\n')} {
         transition: opacity ${this.animationDuration}ms ease-out,
                     height ${this.animationDuration}ms ease-out;
       }
@@ -109,53 +112,12 @@ export class GitHubProfileManager {
   private async loadSettings(): Promise<void> {
     try {
       const { settings } = await chrome.storage.sync.get('settings');
-      this.settings = settings || this.getDefaultSettings();
+      this.settings = settings || DEFAULT_SETTINGS;
       this.applyThemeSettings();
     } catch (error) {
       console.error('Failed to load settings:', error);
-      this.settings = this.getDefaultSettings();
+      this.settings = DEFAULT_SETTINGS;
     }
-  }
-
-  private getDefaultSettings(): Settings {
-    return {
-      hideActivity: false,
-      hideRepositories: false,
-      hideContributions: false,
-      hideAllOrgs: false,
-      hiddenOrgs: [],
-      hideSponsors: false,
-      hideAchievements: false,
-      hideStatus: false,
-      hideFollowers: false,
-      hideFollowing: false,
-      hideLocation: false,
-      hideBio: false,
-      hideEmail: false,
-      hideCompany: false,
-      hideWebsite: false,
-      hideTwitter: false,
-      hidePinnedRepos: false,
-      hidePopularRepos: false,
-      hideLanguageStats: false,
-      hideContributorsSection: false,
-      hideRepoDescription: false,
-      hideActivityGraph: false,
-      hideActivityOverview: false,
-      hideContributionStreak: false,
-      hidePrivateContributions: false,
-      hideReadme: false,
-      hidePackages: false,
-      hideHighlights: false,
-      hideDiscussions: false,
-      hideProjects: false,
-      enableDarkMode: false,
-      customAccentColor: null,
-      compactMode: false,
-      orgViewMode: 'grid',
-      orgSortOrder: 'name',
-      orgGrouping: 'none',
-    };
   }
 
   private setupThemeObserver() {
@@ -165,9 +127,11 @@ export class GitHubProfileManager {
 
     this.themeChangeObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-color-mode' ||
+        if (
+          mutation.attributeName === 'data-color-mode' ||
           mutation.attributeName === 'data-dark-theme' ||
-          mutation.attributeName === 'data-light-theme') {
+          mutation.attributeName === 'data-light-theme'
+        ) {
           this.applyThemeSettings();
         }
       });
@@ -199,7 +163,7 @@ export class GitHubProfileManager {
       root.removeAttribute('data-custom-theme');
     }
 
-    document.querySelectorAll('[data-compact-mode]').forEach(element => {
+    document.querySelectorAll('[data-compact-mode]').forEach((element) => {
       element.setAttribute('data-compact-mode', String(this.settings?.compactMode));
     });
   }
@@ -214,12 +178,12 @@ export class GitHubProfileManager {
 
       for (const mutation of mutations) {
         if (mutation.type === 'childList' || mutation.type === 'attributes') {
-          const hasRelevantChanges = Array.from(mutation.addedNodes).some(node => {
+          const hasRelevantChanges = Array.from(mutation.addedNodes).some((node) => {
             if (node.nodeType !== Node.ELEMENT_NODE) return false;
             const element = node as Element;
-            return Object.values(SELECTORS).some(selectorGroup =>
-              Object.values(selectorGroup).some(selector =>
-                element.matches?.(selector) || element.querySelector?.(selector)
+            return Object.values(SELECTORS).some((selectorGroup) =>
+              Object.values(selectorGroup).some(
+                (selector) => element.matches?.(selector) || element.querySelector?.(selector)
               )
             );
           });
@@ -250,7 +214,8 @@ export class GitHubProfileManager {
     // Apply visibility settings for all sections
     Object.entries(SELECTORS).forEach(([section, selectors]) => {
       Object.entries(selectors).forEach(([, selector]) => {
-        const settingKey = `hide${section.charAt(0).toUpperCase() + section.slice(1)}` as keyof Settings;
+        const settingKey =
+          `hide${section.charAt(0).toUpperCase() + section.slice(1)}` as keyof Settings;
         if (settingKey in this.settings!) {
           this.toggleElements(selector, this.settings![settingKey] as boolean);
         }
@@ -265,14 +230,23 @@ export class GitHubProfileManager {
   }
 
   private handleOrganizationsVisibility() {
+    if (!this.settings) return; // Moved settings check up
+
     const orgContainer = document.querySelector(SELECTORS.organizations.container);
-    if (!orgContainer || !this.settings) return;
+    if (!orgContainer) {
+      // Only log warning if we are not intending to hide all orgs anyway,
+      // or if there are specific orgs to hide/show (which implies the container should exist).
+      // However, a simpler approach is to always warn if the container selector fails,
+      // as it points to a potential breakage.
+      console.warn(`[GitHub Profile Customizer] Organizations container not found using selector '${SELECTORS.organizations.container}'. This may indicate a change in GitHub's page structure or that the selector is no longer valid. Organization-specific customizations may not apply.`);
+      return;
+    }
 
     if (this.settings.hideAllOrgs) {
       this.toggleElements(SELECTORS.organizations.container, true);
     } else {
       this.toggleElements(SELECTORS.organizations.container, false);
-      document.querySelectorAll(SELECTORS.organizations.items).forEach(org => {
+      document.querySelectorAll(SELECTORS.organizations.items).forEach((org) => {
         const orgName = org.getAttribute('aria-label');
         if (orgName && this.settings?.hiddenOrgs.includes(orgName)) {
           org.classList.add('gh-org-hidden');
@@ -285,7 +259,7 @@ export class GitHubProfileManager {
 
   private toggleElements(selector: string, hide: boolean) {
     const elements = document.querySelectorAll(selector);
-    elements.forEach(element => {
+    elements.forEach((element) => {
       if (hide) {
         this.fadeOutElement(element);
       } else {
@@ -314,7 +288,7 @@ export class GitHubProfileManager {
 
   public getOrganizations(): Organization[] {
     const orgs: Organization[] = [];
-    document.querySelectorAll(SELECTORS.organizations.items).forEach(org => {
+    document.querySelectorAll(SELECTORS.organizations.items).forEach((org) => {
       const img = org.querySelector('img');
       const link = org as HTMLAnchorElement;
       const name = org.getAttribute('aria-label') || '';
@@ -338,13 +312,16 @@ export class GitHubProfileManager {
   public getOrganizationStats(): OrganizationStats {
     const organizations = this.getOrganizations();
     const total = organizations.length;
-    const visible = organizations.filter(org => !org.isHidden).length;
+    const visible = organizations.filter((org) => !org.isHidden).length;
     const hidden = total - visible;
 
-    const byType = organizations.reduce((acc, org) => {
-      acc[org.type] = (acc[org.type] || 0) + 1;
-      return acc;
-    }, { personal: 0, business: 0, opensource: 0, other: 0 });
+    const byType = organizations.reduce(
+      (acc, org) => {
+        acc[org.type] = (acc[org.type] || 0) + 1;
+        return acc;
+      },
+      { personal: 0, business: 0, opensource: 0, other: 0 }
+    );
 
     return { total, visible, hidden, byType };
   }
@@ -378,9 +355,9 @@ export class GitHubProfileManager {
       await this.updateSettings({ compactMode: newValue });
 
       // Immediately update compact mode attributes
-      Object.values(SELECTORS).forEach(selectorGroup => {
-        Object.values(selectorGroup).forEach(selector => {
-          document.querySelectorAll(selector).forEach(element => {
+      Object.values(SELECTORS).forEach((selectorGroup) => {
+        Object.values(selectorGroup).forEach((selector) => {
+          document.querySelectorAll(selector).forEach((element) => {
             element.setAttribute('data-compact-mode', String(newValue));
           });
         });
@@ -405,7 +382,7 @@ export class GitHubProfileManager {
 
   public async resetSettings(): Promise<boolean> {
     try {
-      this.settings = this.getDefaultSettings();
+      this.settings = DEFAULT_SETTINGS;
       await chrome.storage.sync.set({ settings: this.settings });
       this.applySettings();
       return true;
@@ -439,10 +416,7 @@ export class GitHubProfileManager {
     }
   }
 
-  public async updateOrganizationVisibility(
-    orgName: string,
-    isHidden: boolean
-  ): Promise<void> {
+  public async updateOrganizationVisibility(orgName: string, isHidden: boolean): Promise<void> {
     if (!this.settings) return;
 
     try {
@@ -480,13 +454,13 @@ export class GitHubProfileManager {
     }
 
     // Remove compact mode attributes
-    document.querySelectorAll('[data-compact-mode]').forEach(element => {
+    document.querySelectorAll('[data-compact-mode]').forEach((element) => {
       element.removeAttribute('data-compact-mode');
     });
 
     // Show all hidden elements and remove transition classes
     const classesToRemove = ['gh-hidden', 'gh-fade-out', 'gh-fade-in', 'gh-org-hidden'];
-    document.querySelectorAll(classesToRemove.map(c => `.${c}`).join(', ')).forEach(element => {
+    document.querySelectorAll(classesToRemove.map((c) => `.${c}`).join(', ')).forEach((element) => {
       element.classList.remove(...classesToRemove);
     });
 
@@ -529,5 +503,4 @@ export class GitHubProfileManager {
     const hidden = this.settings?.hiddenOrgs.length || 0;
     return total - hidden;
   }
-
 }

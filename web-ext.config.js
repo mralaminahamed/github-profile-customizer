@@ -6,26 +6,26 @@ module.exports = {
   // Build configuration
   build: {
     overwriteDest: true,
-    filename: '{name}-v{version}.zip'  // Adds version to the output filename
+    filename: '{name}-v{version}.zip', // Adds version to the output filename
   },
 
   // Run configuration
   run: {
-    target: ['chromium', 'firefox-desktop'],  // Added Firefox support
+    target: ['chromium', 'firefox-desktop'], // Added Firefox support
     startUrl: [
       'https://github.com/',
-      'chrome://extensions/'  // Useful for debugging
+      'chrome://extensions/', // Useful for debugging
     ],
     browserConsole: true,
     args: [
       '--remote-debugging-port=9222',
-      '--no-sandbox'  // Helps prevent some permission issues
+      '--no-sandbox', // Helps prevent some permission issues
     ],
     chromiumProfile: './.profiles/chromium',
-    firefoxProfile: './.profiles/firefox',  // Firefox profile directory
+    firefoxProfile: './.profiles/firefox', // Firefox profile directory
     keepProfileChanges: true,
     profileCreateIfMissing: true,
-    noReload: false  // Auto-reload on changes
+    noReload: false, // Auto-reload on changes
   },
 
   // Files to ignore when building
@@ -61,6 +61,6 @@ module.exports = {
     '.prettierrc.*',
     'web-ext.config.js',
     'jest.config.*',
-    '.env*'
-  ]
-}
+    '.env*',
+  ],
+};

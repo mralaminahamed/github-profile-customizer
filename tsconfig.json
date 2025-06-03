@@ -21,26 +21,16 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": [
-      "vite/client",
-      "node",
-      "chrome",
-      "webextension-polyfill"
-    ]
+    "types": ["vite/client", "node", "chrome", "webextension-polyfill"]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "scripts/**/*.ts",
-    "vite.config.*",
     "manifest.config.ts"
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "web-ext-artifacts"
-  ],
+  "exclude": ["dist", "node_modules", "web-ext-artifacts", "vite.config.ts"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"

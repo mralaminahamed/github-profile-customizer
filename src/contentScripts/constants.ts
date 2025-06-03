@@ -1,26 +1,29 @@
 // src/contentScripts/constants.ts
 export const SELECTORS = {
   activity: {
-    container: '.js-yearly-contributions',
-    graph: '.js-calendar-graph-svg',
-    activityOverview: '.js-activity-overview',
+    container: '.js-yearly-contributions', // Main container for the contributions calendar and activity overview
+    graph: '.js-calendar-graph-svg', // The SVG element for the contribution graph
+    activityOverview: '.js-activity-overview', // Section showing activity overview (e.g., "Pro, Highlights, etc.")
   },
   repositories: {
-    pinnedRepos: '.js-pinned-items-reorder-container',
-    popularRepos: '.js-profile-repositories-section',
+    pinnedRepos: '.js-pinned-items-reorder-container', // Container for pinned repositories
+    popularRepos: '.js-profile-repositories-section', // Section listing popular repositories
   },
   organizations: {
-    container: '.border-top.color-border-muted.pt-3.mt-3.clearfix.hide-sm.hide-md',
-    items: '.avatar-group-item',
+    // VERY FRAGILE: This selector relies on a specific combination of GitHub's Primer CSS utility classes.
+    // It is highly likely to break if GitHub makes styling changes to profile pages.
+    // Finding a more robust selector for this container is a high priority for future improvement.
+    container: '.border-top.color-border-muted.pt-3.mt-3.clearfix.hide-sm.hide-md', // Main container for organizations list
+    items: '.avatar-group-item', // Individual organization avatar items
   },
   contributions: {
-    calendar: '.js-calendar-graph',
-    activityListing: '.contribution-activity-listing',
+    calendar: '.js-calendar-graph', // The older contributions calendar (might be part of activity.container)
+    activityListing: '.contribution-activity-listing', // Feed of contribution activities
   },
   sponsors: {
-    section: '.js-profile-sponsors-section',
+    section: '.js-profile-sponsors-section', // Section for GitHub Sponsors
   },
   achievements: {
-    section: '.js-profile-achievements',
+    section: '.js-profile-achievements', // Section for achievements (badges)
   },
 };

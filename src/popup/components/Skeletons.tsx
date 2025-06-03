@@ -8,22 +8,21 @@ const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
 const TabSkeleton: React.FC = () => (
   <div className="flex space-x-1 rounded-xl bg-gray-100 dark:bg-gray-800/50 p-1">
     {[1, 2, 3, 4].map((i) => (
-      <div
-        key={i}
-        className="w-full py-2 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse"
-      />
+      <div key={i} className="w-full py-2 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
     ))}
   </div>
 );
 
 export const Skeletons: React.FC<{ isCompact?: boolean }> = ({ isCompact = false }) => {
   return (
-    <div className={clsx(
-      'w-[400px] min-h-screen',
-      'bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800',
-      'transition-colors duration-200',
-      isCompact ? 'p-4' : 'p-6'
-    )}>
+    <div
+      className={clsx(
+        'w-[400px] min-h-screen',
+        'bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800',
+        'transition-colors duration-200',
+        isCompact ? 'p-4' : 'p-6'
+      )}
+    >
       {/* Header Skeleton */}
       <header className="flex items-start justify-between mb-8">
         <div className="flex items-center gap-3">

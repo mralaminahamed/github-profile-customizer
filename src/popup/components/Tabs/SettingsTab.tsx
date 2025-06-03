@@ -9,11 +9,17 @@ interface SettingsTabProps extends TabProps {
   onExport: () => void;
   onImport: (settings: Settings) => void;
   onThemeChange: (theme: Theme) => void;
-  onReset?: () => Promise<void>;
+  // onReset?: () => Promise<void>; // Removed as unused in this component
 }
 
-// @ts-ignore
-const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onSettingChange, onExport, onImport, onThemeChange, onReset }) => (
+const SettingsTab: React.FC<SettingsTabProps> = ({
+  settings,
+  onSettingChange,
+  onExport,
+  onImport,
+  onThemeChange,
+  // onReset, // Removed as unused in this component
+}) => (
   <div className="space-y-8">
     {/* Display Settings */}
     <SettingsGroup
@@ -24,17 +30,17 @@ const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onSettingChange, on
           id: 'darkMode',
           title: 'Dark Mode',
           description: 'Use dark color scheme',
-          setting: 'enableDarkMode'
+          setting: 'enableDarkMode',
         },
         {
           id: 'compactMode',
           title: 'Compact Mode',
           description: 'Reduce spacing between elements',
-          setting: 'compactMode'
-        }
+          setting: 'compactMode',
+        },
       ]}
       settings={settings}
-      onChange={onSettingChange}
+      onChange={onSettingChange || (() => () => {})}
     />
 
     {/* Theme Customization */}
@@ -43,9 +49,7 @@ const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onSettingChange, on
         <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
           Theme Customization
         </h3>
-        <p className="text-xs text-gray-500 mt-1">
-          Choose a preset theme or customize colors
-        </p>
+        <p className="text-xs text-gray-500 mt-1">Choose a preset theme or customize colors</p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {THEMES.map((theme) => (
@@ -58,13 +62,11 @@ const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onSettingChange, on
         ))}
       </div>
       <div className="mt-4">
-        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Custom Colors
-        </h4>
+        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Custom Colors</h4>
         <ColorPicker
           value={settings.customAccentColor || '#0969DA'}
-          onChange={(color: any) => onSettingChange('customAccentColor')(color)}
-          presetColors={THEMES.map(theme => theme.accentColor)}
+          onChange={(color: string) => onSettingChange?.('customAccentColor')(color)}
+          presetColors={THEMES.map((theme) => theme.accentColor)}
         />
       </div>
     </div>
@@ -78,23 +80,23 @@ const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onSettingChange, on
           id: 'packages',
           title: 'Packages',
           description: 'Your published packages',
-          setting: 'hidePackages'
+          setting: 'hidePackages',
         },
         {
           id: 'discussions',
           title: 'Discussions',
           description: 'GitHub Discussions activity',
-          setting: 'hideDiscussions'
+          setting: 'hideDiscussions',
         },
         {
           id: 'projects',
           title: 'Projects',
           description: 'Project boards and notes',
-          setting: 'hideProjects'
-        }
+          setting: 'hideProjects',
+        },
       ]}
       settings={settings}
-      onChange={onSettingChange}
+      onChange={onSettingChange || (() => () => {})}
     />
 
     {/* Settings Management */}
@@ -103,16 +105,11 @@ const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onSettingChange, on
         <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
           Settings Management
         </h3>
-        <p className="text-xs text-gray-500 mt-1">
-          Export or import your customization settings
-        </p>
+        <p className="text-xs text-gray-500 mt-1">Export or import your customization settings</p>
       </div>
-      <ExportImport
-        onExport={onExport}
-        onImport={onImport}
-      />
+      <ExportImport onExport={onExport} onImport={onImport} />
     </div>
   </div>
-)
+);
 
 export default SettingsTab;
